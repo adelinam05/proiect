@@ -1,5 +1,6 @@
 
 import re
+import csv
 
 def validare_nume(nume):
    if re.match(r'^[a-zA-Z\-\s]+$',nume) and not re.match(r'^[+\\@!?/]+$',nume):
@@ -74,9 +75,24 @@ while True:
     if comanda.lower() == 'stop':
         break
     elif comanda.lower() == 'salveaza':
-        with open("cursanti.txt", "w") as file:
-            for cursant in cursanti:
-                file.write(f"Nume: {cursant['nume']}, Prenume1: {cursant['prenume']}, Prenume2: {cursant['prenume2']}, CNP: {cursant['cnp']}\n")
-        print("Datele au fost salvate în fișier.")
+        format_fisier = input("Selectati formatul fisierului (csv / txt): ").lower().strip()
+        if format_fisier == 'csv':
+            nume_fisier = "cursanti.csv"
+            with open(nume_fisier, "w", newline='') as file:
+                nume_fisier = "cursanti.csv"
+                with open(nume_fisier, "w", newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(["Nume", "Prenume", "Prenume2", "CNP"])  
+                    for cursant in cursanti:
+                        writer.writerow([cursant['nume'], cursant['prenume'], cursant['prenume2'], cursant['cnp']])
+                print(f"Datele au fost salvate în fișierul {nume_fisier}.")
+        elif format_fisier == 'txt':
+            nume_fisier = "cursanti.txt"
+            with open(nume_fisier, "w") as file:
+                for cursant in cursanti:
+                    file.write(f"Nume: {cursant['nume']}, Prenume1: {cursant['prenume']}, Prenume2: {cursant['prenume2']}, CNP: {cursant['cnp']}\n")
+            print(f"Datele au fost salvate în fișierul {nume_fisier}.")
+        else:
+            print("Formatul specificat nu este recunoscut. Salvarea a fost anulată.")
 
-print("Procesul de introducere a datelor a fost încheiat.")
+print("Procesul de salvare a datelor a fost încheiat.")
